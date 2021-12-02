@@ -20,10 +20,10 @@ import '../../extensions/WithEthPayment.sol';
 import '../../extensions/WithStartTime.sol';
 import '../../extensions/PausableNFT.sol';
 
-/// @title  VidalCrawdSale With Eth contract
+/// @title  VidalCrowdsale With Eth contract
 //
 
-contract VidalCrawdSale is ERC721Enumerable, RandomlyAssigned, WithStartTime, PausableNFT, WithEthPayment {
+contract VidalCrowdsale is ERC721Enumerable, RandomlyAssigned, WithStartTime, PausableNFT, WithEthPayment {
     /**************************libraries ********** */
     using Strings for uint256;
     /***************************Declarations go here ********** */
@@ -54,7 +54,7 @@ contract VidalCrawdSale is ERC721Enumerable, RandomlyAssigned, WithStartTime, Pa
     )
         // @dev : static value here to resolve (Stack too deep) issue
         // ERC721(_name, _symbole)
-        ERC721('VidalCrawdSale', 'Vidal')
+        ERC721('VidalCrowdsale', 'Vidal')
         RandomlyAssigned(maxSupply_, 0, reserved_)
         WithEthPayment(wallets_)
         PausableNFT(owner_)
