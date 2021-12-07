@@ -4,12 +4,12 @@ import { Contract, BigNumber } from 'ethers'
 // import { bigNumberify, hexlify, keccak256, defaultAbiCoder, toUtf8Bytes } from 'ethers/utils'
 import { solidity, MockProvider, deployContract } from 'ethereum-waffle'
 
-import ER721 from '../artifacts/contracts/launchpadProjects/erc721/VidalCrowdsale.sol/VidalCrowdsale.json'
+import ER721 from '../artifacts/contracts/launchpadProjects/erc721/TheKingCollection.sol/TheKingCollection.json'
 import { parseEther } from 'ethers/lib/utils'
 chai.use(solidity)
 const baseUri = 'http://ipfs.io'
-const name = 'VidalCrowdsale'
-const symbol = 'Vidal'
+const name = 'TheKingCollection'
+const symbol = 'KC'
 let timestampBefore = 0
 const nftTestAmount = 4
 const baseURI = 'ipfs://QmVAjAt3otNNJEkEbkR2suki13BhnWZc4ohxG8BA3CLLQd/'
