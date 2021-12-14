@@ -4,15 +4,15 @@ const { parseEther } = require('ethers/lib/utils')
 module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deploy, execute } = deployments
   const { deployer } = await getNamedAccounts()
- 
+
   const baseURI = 'ipfs://QmY1DA4kK2B3B8pyTH5C7Gr8YqKomLKZyH8MY421wtGK9s/'
-  const _maxSupply = 50
-   const reserved_ = 10
-  const _startTimeSale = 1638895394//Date.now()/100
-  const _wallets = ['0x2819C6d61e4c83bc53dD17D4aa00deDBe35894AA',"0x4DECad41547aA81740Be6016ad402BA201Ec973b"]
-  const _mintPrice = parseEther((0.06).toString())
-  const _revealTime = 86400 // 1 day
-  const _owner = deployer
+  const _maxSupply = 2500
+  const reserved_ = 100
+  const _startTimeSale = 1639461600 //Date.now()/100
+  const _wallets = ['0xac701BB1557F6c06070Bc114Ca6Ace4a358D3A84']
+  const _mintPrice = parseEther((0.1).toString())
+  const _revealTime = 86400 * 7 //2 // 1 day
+  const _owner =  "0xac701BB1557F6c06070Bc114Ca6Ace4a358D3A84"
   await deploy('TheKingCollection', {
     from: deployer,
     args: [
@@ -30,6 +30,6 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     ],
     log: true,
   })
-  await execute('TheKingCollection', { from: deployer }, 'mintReservedNFTs', deployer, 5)
+ // await execute('TheKingCollection', { from: deployer }, 'mintReservedNFTs', deployer, 5)
 }
 module.exports.tags = ['TheKingCollection']

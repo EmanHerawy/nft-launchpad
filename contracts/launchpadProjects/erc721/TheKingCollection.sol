@@ -54,7 +54,7 @@ contract TheKingCollection is ERC721Enumerable, RandomlyAssigned, WithStartTime,
     )
         // @dev : static value here to resolve (Stack too deep) issue
         // ERC721(_name, _symbole)
-        ERC721('The King Collection', 'KC')
+        ERC721('The King Vidal Collection', 'KVC')
         RandomlyAssigned(maxSupply_, 0, reserved_)
         WithEthPayment(wallets_)
         PausableNFT(owner_)
