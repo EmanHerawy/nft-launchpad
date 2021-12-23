@@ -63,7 +63,7 @@ contract TheKingCollection is ERC721Enumerable, RandomlyAssigned, WithStartTime,
         _baseTokenURI = baseTokenURI_;
         mintPrice = mintPrice_;
         revealTime = revealTime_;
-     }
+    }
 
     /******************************************* read state functions go here ********************************************************* */
     /// @notice this function will throw error if called before time

@@ -74,7 +74,7 @@ const config: HardhatUserConfig = {
       chainId: 256,
     },
     matic_test: {
-      url: 'https://rpc-mumbai.matic.today',
+      url: 'https://matic-mumbai.chainstacklabs.com/',
       accounts: [privateKey],
       saveDeployments: true,
       chainId: 80001,
@@ -98,7 +98,7 @@ const config: HardhatUserConfig = {
       saveDeployments: true,
       accounts: [privateKey],
       loggingEnabled: true,
-      gasPrice: 70 * 1000000000,
+      gasPrice: 80 * 1000000000,
       throwOnTransactionFailures: true,
     },
     rinkeby: {
@@ -159,7 +159,7 @@ const config: HardhatUserConfig = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 3000,
+            runs: 300,
           },
         },
       },

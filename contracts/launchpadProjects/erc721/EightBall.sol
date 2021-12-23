@@ -57,9 +57,8 @@ contract EightBall is ERC721Enumerable, RandomlyAssigned, WithStartTime, Pausabl
         ERC721('EightBall', '8B')
         RandomlyAssigned(maxSupply_, 0, reserved_)
         WithEthPayment(wallets_)
-        PausableNFT(owner_)        WithStartTime(startTimeSale_)
-
-
+        PausableNFT(owner_)
+        WithStartTime(startTimeSale_)
     {
         _baseTokenURI = baseTokenURI_;
         mintPrice = mintPrice_;

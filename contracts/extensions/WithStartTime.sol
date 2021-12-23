@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.4;
 
-
 /// @title mange start time for sale
 abstract contract WithStartTime {
     uint256 private _startTimeSale;
-constructor(uint256 startTime_){
-    _startTimeSale = startTime_;
-}
+
+    constructor(uint256 startTime_) {
+        _startTimeSale = startTime_;
+    }
+
     modifier isSaleStarted() {
         require(_startTimeSale <= block.timestamp && _startTimeSale != 0, 'Sale did not start yet');
 
@@ -30,6 +31,4 @@ constructor(uint256 startTime_){
     function startTimeSale() external view returns (uint256) {
         return _startTimeSale;
     }
-
-  
 }
