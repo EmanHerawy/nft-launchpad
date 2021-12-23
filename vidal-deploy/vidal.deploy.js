@@ -11,7 +11,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const _startTimeSale = 1639461600 //Date.now()/100
   const _wallets = ['0xac701BB1557F6c06070Bc114Ca6Ace4a358D3A84']
   const _mintPrice = parseEther((0.1).toString())
-  const _revealTime = 86400 * 7 //2 // 1 day
+  const _revealTime = 120 //86400 * 7 //2 // 1 day
   const _owner =  "0xac701BB1557F6c06070Bc114Ca6Ace4a358D3A84"
   await deploy('TheKingCollection', {
     from: deployer,
