@@ -22,10 +22,11 @@ const reserved_ = 388
 const _startTimeSale = 0 //Date.now()
 const _wallets = ['0x2819C6d61e4c83bc53dD17D4aa00deDBe35894AA']
 const _mintPrice = parseEther((0.06).toString()).toString()
+const _whitelistMintPrice = parseEther((0.006).toString()).toString()
 const _revealTime = 60 // 1 munite
 describe('AnyNFTPausableWithEthRounds', () => {
   const provider = new MockProvider()
-  const [wallet, other, user2] = provider.getWallets()
+  const [wallet, other, user1,user2] = provider.getWallets()
   let token: Contract
   before(async () => {
     token = await deployContract(wallet, ER721, [
@@ -88,9 +89,9 @@ describe('AnyNFTPausableWithEthRounds', () => {
     )
   })
   it(' OWner can mint reserved nft mintreservedNFTs', async () => {
-    await expect(await token.connect(wallet).mintReservedNFTs(user2.address, nftTestAmount)).to.emit(token, 'Transfer')
+    await expect(await token.connect(wallet).mintReservedNFTs(user1.address, nftTestAmount)).to.emit(token, 'Transfer')
 
-    await expect(await token.balanceOf(user2.address)).to.eql(BigNumber.from(nftTestAmount))
+    await expect(await token.balanceOf(user1.address)).to.eql(BigNumber.from(nftTestAmount))
     await expect(await token.totalReserveSupply()).to.eql(BigNumber.from(nftTestAmount))
   })
 
@@ -166,7 +167,25 @@ describe('AnyNFTPausableWithEthRounds', () => {
   it(' Owner Should  change round', async () => {
     await expect(token.connect(wallet).addNewRound(round + 10, _mintPrice)).to.emit(token, 'RoundStarted')
   })
+  it(' Owner Should  set whitelist and whitelist price', async () => {
+    await expect( token.connect(wallet).setWhiteList([user1.address,user2.address])).to.emit(token, 'WhiteListUpdated')
+    await expect(token.connect(wallet).setWhiteListPrice(_whitelistMintPrice)).to.emit(token, 'WhiteListPriceUpdated')
+  })
+  it('Whitelist Should mint with whitelist mint price', async () => {
+          await token.unpause()
+
+    await expect(
+      await token.connect(user2).mint(nftTestAmount, {
+        value: (nftTestAmount * + _whitelistMintPrice).toString(),
+      })
+    ).to.emit(token, 'Transfer')
+  
+
+    await expect(await token.balanceOf(user2.address)).to.eql(BigNumber.from(nftTestAmount))
+  })
   it(' Owner Shouldnot  add new round while other round is running', async () => {
+       await token.pause()
+
     await expect(token.connect(wallet).addNewRound(round + 10, _mintPrice)).to.revertedWith('Last Round is running')
   })
 })
