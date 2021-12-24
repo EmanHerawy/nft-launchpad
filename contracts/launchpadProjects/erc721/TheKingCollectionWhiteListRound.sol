@@ -15,15 +15,25 @@ pragma solidity 0.8.4;
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 
 import '@openzeppelin/contracts/utils/Strings.sol';
+import '../../extensions/WithWhiteListSupport.sol';
+import '../../extensions/WithRoundsSupport.sol';
 import '../../extensions/RandomlyAssigned.sol';
 import '../../extensions/WithEthPayment.sol';
 import '../../extensions/WithStartTime.sol';
 import '../../extensions/PausableNFT.sol';
 
-/// @title  EightBall With Eth contract
+/// @title  TheKingCollection With Eth contract
 //
-/// @author startfi team
-contract EightBall is ERC721Enumerable, RandomlyAssigned, WithStartTime, PausableNFT, WithEthPayment {
+
+contract TheKingCollectionWhiteListRound is
+    ERC721Enumerable,
+    RandomlyAssigned,
+    WithStartTime,
+    PausableNFT,
+    WithEthPayment,
+    WithWhiteListSupport,
+    WithRoundsSupport
+{
     /**************************libraries ********** */
     using Strings for uint256;
     /***************************Declarations go here ********** */
@@ -38,6 +48,16 @@ contract EightBall is ERC721Enumerable, RandomlyAssigned, WithStartTime, Pausabl
     // event
 
     // modifier
+    modifier isWithinCapLimit(uint256 _numberOfNFTs) override /*(WithLimitedSupplyAndReserves) */
+    {
+        require(((tokenCount() - _totalReserveSupply) + _numberOfNFTs) <= roundCap(), 'Purchase exceeds max supply');
+        _;
+    }
+    modifier roundWithinCapLimit(uint256 roundCap_) {
+        require((tokenCount() + roundCap_) <= (maxSupply() - reserved()), 'round cap exceeds max supply');
+        _;
+    }
+
     /******************************************* constructor goes here ********************************************************* */
     constructor(
         // string memory _name,
@@ -48,20 +68,22 @@ contract EightBall is ERC721Enumerable, RandomlyAssigned, WithStartTime, Pausabl
         uint256 maxSupply_,
         uint256 revealTime_,
         uint256 reserved_,
+        uint256 roundCap_,
         address[] memory wallets_,
         address owner_
     )
         // @dev : static value here to resolve (Stack too deep) issue
         // ERC721(_name, _symbole)
-        ERC721('EightBall', '8B')
+        ERC721('The King Vidal Collection', 'KVC')
         RandomlyAssigned(maxSupply_, 0, reserved_)
         WithEthPayment(wallets_, mintPrice_)
         PausableNFT(owner_)
         WithStartTime(startTimeSale_)
     {
+        require(roundCap_ <= maxSupply_, 'Round cap must not be more than the max cap');
         _baseTokenURI = baseTokenURI_;
         revealTime = revealTime_;
-        ///  startTimeSale = startTimeSale_;
+        _addNewRound(roundCap_);
     }
 
     /******************************************* read state functions go here ********************************************************* */
@@ -134,9 +156,13 @@ contract EightBall is ERC721Enumerable, RandomlyAssigned, WithStartTime, Pausabl
     /// @dev must not xceed the cap
     /// @param _numberOfNFTs number of NFT to be minted
     /// emit Transfer
-    function mint(uint256 _numberOfNFTs) external payable whenNotPaused isSaleStarted {
+    function mint(uint256 _numberOfNFTs) external payable whenNotPaused isSaleStarted isWithinCapLimit(_numberOfNFTs) {
         require(_numberOfNFTs > 0, 'invalid_amount');
-        require(mintPrice() * _numberOfNFTs <= msg.value, 'ETH value not correct');
+        if (isWhiteListed(_msgSender())) {
+            require(whilteListPrice() * _numberOfNFTs <= msg.value, 'ETH value not correct');
+        } else {
+            require(mintPrice() * _numberOfNFTs <= msg.value, 'ETH value not correct');
+        }
         _batchMint(_msgSender(), _numberOfNFTs);
     }
 
@@ -163,6 +189,21 @@ contract EightBall is ERC721Enumerable, RandomlyAssigned, WithStartTime, Pausabl
     /// @param _startTime new _startTime
     function updateSaleStartTime(uint256 _startTime) external onlyOwner isSaleNotStarted {
         _setSaleStartTime(_startTime);
+    }
+
+    function setWhiteList(address[] memory _list) external onlyOwner {
+        _setWhiteList(_list);
+    }
+
+    function setWhiteListPrice(uint256 price_) external onlyOwner {
+        _setWhiteListPrice(price_);
+    }
+
+    function addNewRound(uint256 cap_, uint256 mintPrice_) external onlyOwner whenPaused roundWithinCapLimit(cap_) {
+        require((tokenCount() - _totalReserveSupply) == roundCap(), 'Last Round is running');
+
+        _addNewRound(cap_);
+        _setMintPrice(mintPrice_);
     }
 
     /**

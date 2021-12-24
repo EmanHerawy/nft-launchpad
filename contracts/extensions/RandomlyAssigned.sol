@@ -3,7 +3,7 @@ pragma solidity 0.8.4;
 
 import './WithLimitedSupplyAndReserves.sol';
 
-/// @author 1001.digital | edit: Eman Herawy
+/// @author 1001.digital | edit
 /// @title Randomly assign tokenIDs from a given set of tokens.
 abstract contract RandomlyAssigned is WithLimitedSupplyAndReserves {
     // Used for random index assignment

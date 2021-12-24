@@ -17,7 +17,7 @@ import '@openzeppelin/contracts/security/Pausable.sol';
 
 /// @title  AnyNFT With Eth contract
 //
-/// @author startfi team : Eman herawy
+/// @author startfi team
 abstract contract PausableNFT is Pausable, Ownable {
     /**************************libraries ********** */
 

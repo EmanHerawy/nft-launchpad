@@ -10,7 +10,7 @@ abstract contract WithLimitedSupplyAndReserves is WithLimitedSupply {
 
     uint256 private immutable _reserved;
 
-    modifier isWithinCapLimit(uint256 _numberOfNFTs) override {
+    modifier isWithinCapLimit(uint256 _numberOfNFTs) virtual override {
         require((tokenCount() + _numberOfNFTs) <= (maxSupply() - _reserved), 'Purchase exceeds max supply');
         _;
     }
@@ -28,7 +28,7 @@ abstract contract WithLimitedSupplyAndReserves is WithLimitedSupply {
 
     /// @dev Get reserved amount
     /// @return the token amount reserved
-    function reserved() external view returns (uint256) {
+    function reserved() public view returns (uint256) {
         return _reserved;
     }
 

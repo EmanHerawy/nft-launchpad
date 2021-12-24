@@ -28,7 +28,6 @@ contract TheKingCollection is ERC721Enumerable, RandomlyAssigned, WithStartTime,
     using Strings for uint256;
     /***************************Declarations go here ********** */
     // stat var
-    uint256 public immutable mintPrice;
     uint256 public immutable revealTime;
 
     string private _baseTokenURI;
@@ -56,12 +55,11 @@ contract TheKingCollection is ERC721Enumerable, RandomlyAssigned, WithStartTime,
         // ERC721(_name, _symbole)
         ERC721('The King Vidal Collection', 'KVC')
         RandomlyAssigned(maxSupply_, 0, reserved_)
-        WithEthPayment(wallets_)
+        WithEthPayment(wallets_, mintPrice_)
         PausableNFT(owner_)
         WithStartTime(startTimeSale_)
     {
         _baseTokenURI = baseTokenURI_;
-        mintPrice = mintPrice_;
         revealTime = revealTime_;
     }
 
@@ -137,7 +135,7 @@ contract TheKingCollection is ERC721Enumerable, RandomlyAssigned, WithStartTime,
     /// emit Transfer
     function mint(uint256 _numberOfNFTs) external payable whenNotPaused isSaleStarted {
         require(_numberOfNFTs > 0, 'invalid_amount');
-        require(mintPrice * _numberOfNFTs <= msg.value, 'ETH value not correct');
+        require(mintPrice() * _numberOfNFTs <= msg.value, 'ETH value not correct');
         _batchMint(_msgSender(), _numberOfNFTs);
     }
 

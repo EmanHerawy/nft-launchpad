@@ -17,27 +17,35 @@ import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 
 /// @title  WithEthPayment contract
 //
-/// @author startfi team : Eman herawy
+/// @author startfi team
 contract WithEthPayment is ReentrancyGuard {
     /**************************libraries ********** */
     using Address for address payable;
+    uint256 private _mintPrice;
+
     /***************************Declarations go here ********** */
     // stat var
 
     address[] private _wallets;
 
     // event
+    event UpdateMintPrice(uint256 newParice);
     event Withdrawn(address payee, uint256 amount);
 
     // modifier
     /******************************************* constructor goes here ********************************************************* */
-    constructor(address[] memory wallets_) {
+    constructor(address[] memory wallets_, uint256 mintPrice_) {
         _wallets = wallets_;
+        _mintPrice = mintPrice_;
     }
 
     /******************************************* read state functions go here ********************************************************* */
 
     /******************************************* modify state functions go here ********************************************************* */
+
+    function mintPrice() public view returns (uint256) {
+        return _mintPrice;
+    }
 
     function getWallets() external view returns (address[] memory) {
         return _wallets;
@@ -59,5 +67,11 @@ contract WithEthPayment is ReentrancyGuard {
             emit Withdrawn(_wallets[index], share);
             payable(_wallets[index]).sendValue(share);
         }
+    }
+
+    function _setMintPrice(uint256 mintPrice_) internal {
+        require(mintPrice_ > 0, 'Zero value is not allowed');
+        _mintPrice = mintPrice_;
+        emit UpdateMintPrice(mintPrice_);
     }
 }
