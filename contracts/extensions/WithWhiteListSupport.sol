@@ -25,7 +25,7 @@ abstract contract WithWhiteListSupport {
         for (uint256 index = 0; index < _list.length; index++) {
             require(_list[index] != address(0), 'empty address is not allowed');
             require(!_whiteList.contains(_list[index]), 'duplicated address is not allowed');
-            _whiteList.add(_list[index]);
+           require( _whiteList.add(_list[index]));
             emit WhiteListUpdated(_list[index]);
         }
     }
