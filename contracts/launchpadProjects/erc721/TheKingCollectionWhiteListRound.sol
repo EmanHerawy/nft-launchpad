@@ -48,8 +48,9 @@ contract TheKingCollectionWhiteListRound is
     // event
 
     // modifier
-    modifier isWithinCapLimit(uint256 _numberOfNFTs) override /*(WithLimitedSupplyAndReserves) */
-    {
+    modifier isWithinCapLimit(
+        uint256 _numberOfNFTs /*(WithLimitedSupplyAndReserves) */
+    ) override {
         require(((tokenCount() - _totalReserveSupply) + _numberOfNFTs) <= roundCap(), 'Purchase exceeds max supply');
         _;
     }

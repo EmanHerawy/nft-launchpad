@@ -134,7 +134,7 @@ contract EightBall is ERC721Enumerable, RandomlyAssigned, WithStartTime, Pausabl
     /// @dev must not xceed the cap
     /// @param _numberOfNFTs number of NFT to be minted
     /// emit Transfer
-    function mint(uint256 _numberOfNFTs) external payable whenNotPaused isSaleStarted {
+    function mint(uint256 _numberOfNFTs) external payable whenNotPaused isSaleStarted isWithinCapLimit(_numberOfNFTs) {
         require(_numberOfNFTs > 0, 'invalid_amount');
         require(mintPrice() * _numberOfNFTs <= msg.value, 'ETH value not correct');
         _batchMint(_msgSender(), _numberOfNFTs);
